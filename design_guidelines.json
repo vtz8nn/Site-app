@@ -1,0 +1,116 @@
+{
+  "theme": "dark",
+  "design_philosophy": "E1 Tactical Elite. A mobile-first inventory management tool for a Brazilian retail store counter. High tension, absolute clarity, bold 'Electric Blue on Obsidian Black' theme. The UI must feel like a precision command center, not a generic SaaS app.",
+  "colors": {
+    "background": "hsl(220, 25%, 6%)",
+    "foreground": "hsl(214, 32%, 91%)",
+    "card": "hsl(218, 24%, 9%)",
+    "card_foreground": "hsl(214, 32%, 91%)",
+    "primary": "hsl(221, 83%, 53%)",
+    "primary_foreground": "hsl(0, 0%, 100%)",
+    "secondary": "hsl(224, 64%, 33%)",
+    "secondary_foreground": "hsl(214, 32%, 91%)",
+    "muted": "hsl(215, 28%, 17%)",
+    "muted_foreground": "hsl(215, 20%, 65%)",
+    "border": "hsl(215, 28%, 17%)",
+    "destructive": "hsl(0, 84%, 60%)",
+    "ring": "hsl(221, 83%, 53%)",
+    "whatsapp_green": "#25D366",
+    "stock_status": {
+      "good": "#10B981",
+      "low": "#F59E0B",
+      "out": "#EF4444"
+    }
+  },
+  "typography": {
+    "font_pairings": {
+      "headings": "Outfit, sans-serif (Strong, technical, squarish for high data legibility)",
+      "body": "Manrope, sans-serif (Clean, geometric, readable at small sizes)"
+    },
+    "hierarchy": {
+      "h1": "text-4xl tracking-tighter font-black",
+      "h2": "text-2xl tracking-tight font-bold",
+      "h3": "text-xl tracking-tight font-semibold",
+      "price": "text-2xl font-bold tracking-tight text-primary",
+      "body": "text-base font-medium leading-relaxed",
+      "labels": "text-xs uppercase tracking-[0.2em] text-muted-foreground font-bold"
+    },
+    "rules": [
+      "NEVER use generic fonts like Inter or Roboto for headings.",
+      "Always left-align data and text. Centered text is forbidden except in empty states.",
+      "Prices (R$) must be highly legible and use the 'price' class styling."
+    ]
+  },
+  "layouts": {
+    "mobile_first_strategy": "The 'Command Center' layout. Designed for one-handed operation on a store counter.",
+    "spacing": "Generous. Use p-6 and p-8 for containers. The gap between components should be gap-6 or gap-8.",
+    "navigation": "Sticky bottom navigation bar with Glassmorphism (backdrop-blur-xl bg-background/80 border-t border-white/10). No hidden hamburger menus.",
+    "dashboard_grid": "Dense but clear. Product cards stacked vertically (grid-cols-1). Each card is a wide horizontal layout: Photo on left (w-24 h-24), data and buttons on right.",
+    "surface_strategy": "Grid Borders (The 'Technical' Look). Use flat backgrounds with 1px border-white/10. No heavy shadows in dark mode."
+  },
+  "visual_enhancers": {
+    "borders": "1px solid hsl(215, 28%, 17%) for all cards and inputs to define boundaries.",
+    "glassmorphism": "Use for sticky headers/footers: backdrop-blur-xl bg-background/70 border-b (or border-t) border-white/10.",
+    "badges": "Stock status badges must be small, high-contrast pills with text matching the status color (e.g., text-emerald-400 bg-emerald-400/10)."
+  },
+  "components": {
+    "product_card": {
+      "style": "Flat, horizontal card layout. border border-border bg-card rounded-md p-4.",
+      "image": "Rounded-md, w-24 h-24 object-cover on the left.",
+      "content": "Right side contains Product Name, Price (R$), and Stock status badge.",
+      "actions": "Massive +1 (Entry) and -1 (Sale) buttons on the bottom right of the card. -1 should be primary colored, +1 should be secondary/outline."
+    },
+    "buttons": {
+      "primary": "bg-primary text-white font-bold rounded-md px-6 py-4 (Huge tap targets).",
+      "whatsapp": "bg-[#25D366] text-white font-bold rounded-md. Use only for 'Send Full Report' and 'Request Restock'."
+    },
+    "inputs": {
+      "style": "bg-background border border-border text-foreground p-4 rounded-md focus:ring-2 focus:ring-primary focus:border-transparent."
+    }
+  },
+  "motion": {
+    "rules": [
+      "NO universal transitions (e.g., transition: all).",
+      "Use specific transitions: transition: transform 0.2s ease, opacity 0.2s ease, background-color 0.2s ease.",
+      "Buttons: Active state must scale down slightly (active:scale-95).",
+      "Hover states: Lighter background color, never rely on inheritance."
+    ]
+  },
+  "accessibility": {
+    "contrast": "Ensure APCA contrast standards. Dark mode text must be bright enough (foreground is 91% lightness).",
+    "touch_targets": "Minimum 48x48px for all interactive elements (buttons, inputs).",
+    "testing": "All interactive elements MUST include data-testid attribute (e.g., data-testid=\"sale-button-productId\")."
+  },
+  "image_urls": [
+    {
+      "url": "https://images.unsplash.com/photo-1764173039192-2bbd508d5211?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NjZ8MHwxfHNlYXJjaHwxfHxyZXRhaWwlMjBzdG9yZSUyMG93bmVyJTIwcG9ydHJhaXR8ZW58MHx8fHwxNzg5NDg2MzUwfDA&ixlib=rb-4.1.0&q=85",
+      "description": "Bald man with glasses in a store",
+      "category": "Store Owner Portrait / Config Screen Placeholder"
+    },
+    {
+      "url": "https://images.unsplash.com/photo-1560769629-975ec94e6a86?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxOTJ8MHwxfHNlYXJjaHwxfHxzbmVha2VycyUyMHByb2R1Y3QlMjBzaG90fGVufDB8fHx8MTc4OTQ4NjM1MHww&ixlib=rb-4.1.0&q=85",
+      "description": "pair of white-and-orange athletic shoes on white box",
+      "category": "Product Image Placeholder"
+    }
+  ],
+  "instructions_to_main_agent": [
+    "You are building a mobile-first web app using React (.js, not .tsx) and Tailwind.",
+    "Implement the dark theme by default by hardcoding the CSS variables in index.css as provided in this guide's colors, or forcing the 'dark' class on the HTML tag.",
+    "Use Shadcn components but heavily customize them. Strip away the generic 'Vercel-look'. Make buttons chunky and borders sharp (rounded-md max).",
+    "Do NOT use HTML <select> or <input type='date'>. Use Shadcn DropdownMenu and Calendar.",
+    "Integrate Lucide React for icons. Use precise, technical icons (e.g., Database, Zap, Plus, Minus, MessageCircle for WhatsApp).",
+    "Use 'sonner' for toast notifications (e.g., 'Stock updated', 'Report sent').",
+    "Ensure the Store Config screen exists to set the owner's WhatsApp number.",
+    "Ensure 'Request Restock' directly formats a WhatsApp URL (e.g., https://wa.me/...) with the product details.",
+    "Do NOT use transparent backgrounds for the sticky headers. Use backdrop-blur-xl with bg-background/80."
+  ],
+  "UNIVERSAL GUIDELINES FOR MAIN AGENT": [
+    "Do not use generic centered layouts or simplistic gradients.",
+    "Create depth through layered design elements and 1px borders, even in dark mode.",
+    "You MUST NOT apply universal transitions (transition: all).",
+    "You MUST NOT center align the app container (.App { text-align: center; } is forbidden).",
+    "Always use modern button styles (chunky, distinct active/hover states).",
+    "Never use AI assistant emojis. Use lucide-react icons.",
+    "All interactive elements MUST have data-testid attributes."
+  ]
+}

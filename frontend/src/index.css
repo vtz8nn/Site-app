@@ -1,0 +1,111 @@
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Manrope:wght@400;500;600;700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root {
+        --background: 220 25% 6%;
+        --foreground: 214 32% 91%;
+        --card: 218 24% 9%;
+        --card-foreground: 214 32% 91%;
+        --popover: 218 24% 9%;
+        --popover-foreground: 214 32% 91%;
+        --primary: 221 83% 53%;
+        --primary-foreground: 0 0% 100%;
+        --secondary: 224 64% 33%;
+        --secondary-foreground: 214 32% 91%;
+        --muted: 215 28% 17%;
+        --muted-foreground: 215 20% 65%;
+        --accent: 215 28% 17%;
+        --accent-foreground: 214 32% 91%;
+        --destructive: 0 84% 60%;
+        --destructive-foreground: 0 0% 100%;
+        --border: 215 28% 17%;
+        --input: 215 28% 17%;
+        --ring: 221 83% 53%;
+        --radius: 0.5rem;
+    }
+    .dark {
+        --background: 220 25% 6%;
+        --foreground: 214 32% 91%;
+        --card: 218 24% 9%;
+        --card-foreground: 214 32% 91%;
+        --popover: 218 24% 9%;
+        --popover-foreground: 214 32% 91%;
+        --primary: 221 83% 53%;
+        --primary-foreground: 0 0% 100%;
+        --secondary: 224 64% 33%;
+        --secondary-foreground: 214 32% 91%;
+        --muted: 215 28% 17%;
+        --muted-foreground: 215 20% 65%;
+        --accent: 215 28% 17%;
+        --accent-foreground: 214 32% 91%;
+        --destructive: 0 84% 60%;
+        --destructive-foreground: 0 0% 100%;
+        --border: 215 28% 17%;
+        --input: 215 28% 17%;
+        --ring: 221 83% 53%;
+    }
+}
+
+html {
+    background-color: hsl(var(--background));
+}
+
+body {
+    margin: 0;
+    font-family: "Manrope", system-ui, sans-serif;
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
+}
+
+h1, h2, h3, h4, .font-display {
+    font-family: "Outfit", system-ui, sans-serif;
+    letter-spacing: -0.02em;
+}
+
+@layer base {
+    * { @apply border-border; }
+    body { @apply bg-background text-foreground; }
+}
+
+/* Selection */
+::selection { background: hsl(221 83% 53% / 0.35); color: white; }
+
+/* Subtle grid background */
+.grid-bg {
+    background-image:
+        linear-gradient(hsl(215 28% 17% / 0.4) 1px, transparent 1px),
+        linear-gradient(90deg, hsl(215 28% 17% / 0.4) 1px, transparent 1px);
+    background-size: 40px 40px;
+}
+
+/* Card lift */
+.card-tech {
+    background: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
+    transition: border-color 0.2s ease, transform 0.2s ease;
+}
+.card-tech:hover { border-color: hsl(221 83% 53% / 0.5); }
+
+/* Button micro-interaction */
+.btn-tap { transition: transform 0.15s ease, background-color 0.2s ease, opacity 0.2s ease; }
+.btn-tap:active { transform: scale(0.96); }
+
+/* Status dot pulse */
+@keyframes pulseDot {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+}
+.pulse-dot { animation: pulseDot 2s ease-in-out infinite; }
+
+/* Prevent flash */
+input, textarea, select { color: hsl(var(--foreground)); }
+
+/* Hide default scrollbar in mobile nice-ness */
+.hide-scrollbar::-webkit-scrollbar { display: none; }
