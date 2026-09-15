@@ -3,94 +3,112 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>StockNotify BR - Controle & Fotos</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; }
-    body { background-color: #f1f5f9; padding: 15px; color: #0f172a; max-width: 900px; margin: 0 auto; }
-    header { text-align: center; margin-bottom: 20px; }
-    h1 { font-size: 1.4rem; color: #1e293b; }
-    
-    .card { background: #ffffff; padding: 16px; border-radius: 10px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); margin-bottom: 20px; }
-    .card h3 { margin-bottom: 12px; font-size: 1.1rem; color: #334155; }
-    .form-group { margin-bottom: 10px; }
-    label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 4px; color: #475569; }
-    input { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.95rem; }
-    
-    .btn { width: 100%; padding: 10px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 0.9rem; }
-    .btn-primary { background: #2563eb; color: #fff; }
-    .btn-dono { background: #075e54; color: #fff; margin-top: 8px; }
-
-    .grid-produtos { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 15px; }
-    .produto-card { background: #fff; border-radius: 10px; padding: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); position: relative; border: 1px solid #e2e8f0; display: flex; flex-direction: column; justify-content: space-between; }
-    
-    .img-produto { width: 100%; height: 160px; object-fit: cover; border-radius: 8px; margin-bottom: 10px; background-color: #e2e8f0; }
-
-    .badge { position: absolute; top: 22px; right: 22px; padding: 4px 8px; border-radius: 12px; color: #fff; font-size: 0.7rem; font-weight: bold; z-index: 2; }
-    .badge-ok { background-color: #16a34a; }
-    .badge-alerta { background-color: #d97706; }
-    .badge-critico { background-color: #dc2626; }
-
-    .qtd-box { font-size: 1.1rem; font-weight: bold; margin: 8px 0; color: #1e293b; }
-    .acoes { display: flex; gap: 8px; margin-top: 10px; }
-    .btn-acao { flex: 1; padding: 8px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; color: #fff; }
-    .btn-venda { background-color: #16a34a; }
-    .btn-entrada { background-color: #0284c7; }
-    .btn-remover { background-color: #ef4444; margin-top: 8px; width: 100%; }
-    
-    .btn-whats { width: 100%; margin-top: 8px; background-color: #25d366; color: #fff; padding: 8px; border: none; border-radius: 6px; font-weight: bold; text-decoration: none; display: block; text-align: center; font-size: 0.85rem; }
-  </style>
+  <title>StockNotify - Gestão de Estoque</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body>
+<body class="bg-slate-100 text-slate-800 antialiased min-h-screen pb-12">
 
-  <header>
-    <h1>📦 Gestão de Estoque com Fotos</h1>
+  <!-- Header -->
+  <header class="bg-slate-900 text-white py-6 px-4 shadow-md sticky top-0 z-50">
+    <div class="max-w-4xl mx-auto flex justify-between items-center">
+      <div class="flex items-center gap-3">
+        <i class="fa-solid fa-boxes-stacked text-blue-400 text-2xl"></i>
+        <h1 class="text-xl font-bold tracking-tight">StockNotify <span class="text-xs bg-blue-600 px-2 py-0.5 rounded-full">PRO</span></h1>
+      </div>
+      <button onclick="enviarResumoDono()" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold px-3 py-2 rounded-lg flex items-center gap-2 transition">
+        <i class="fa-brands fa-whatsapp text-sm"></i> Relatório Dono
+      </button>
+    </div>
   </header>
 
-  <!-- Configuração do WhatsApp do Dono -->
-  <div class="card">
-    <h3>📱 WhatsApp da Empresa / Proprietário</h3>
-    <div class="form-group">
-      <label for="whats-dono">WhatsApp para Receber Alertas de Vendas (com DDD):</label>
-      <input type="text" id="whats-dono" placeholder="5521999999999" onchange="salvarWhatsDono()">
+  <main class="max-w-4xl mx-auto px-4 mt-6 space-y-6">
+
+    <!-- KPIs / Dashboard Metrics -->
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center gap-3">
+        <div class="p-3 bg-blue-50 text-blue-600 rounded-lg"><i class="fa-solid fa-box text-lg"></i></div>
+        <div>
+          <p class="text-xs text-slate-500 font-medium">Total de Itens</p>
+          <p class="text-lg font-bold" id="kpi-total-itens">0</p>
+        </div>
+      </div>
+      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center gap-3">
+        <div class="p-3 bg-emerald-50 text-emerald-600 rounded-lg"><i class="fa-solid fa-sack-dollar text-lg"></i></div>
+        <div>
+          <p class="text-xs text-slate-500 font-medium">Valor em Estoque</p>
+          <p class="text-lg font-bold" id="kpi-valor-total">R$ 0,00</p>
+        </div>
+      </div>
+      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm col-span-2 md:col-span-1 flex items-center gap-3">
+        <div class="p-3 bg-amber-50 text-amber-600 rounded-lg"><i class="fa-solid fa-triangle-exclamation text-lg"></i></div>
+        <div>
+          <p class="text-xs text-slate-500 font-medium">Alertas de Baixa</p>
+          <p class="text-lg font-bold text-amber-600" id="kpi-alertas">0</p>
+        </div>
+      </div>
     </div>
-    <button class="btn btn-dono" onclick="enviarResumoDono()">📊 Enviar Relatório Completo ao Dono</button>
-  </div>
 
-  <!-- Form de Cadastro com Foto -->
-  <div class="card">
-    <h3>➕ Cadastrar Novo Produto</h3>
-    <form id="form-produto">
-      <div class="form-group">
-        <label for="nome">Nome do Produto:</label>
-        <input type="text" id="nome" required placeholder="Ex: Camiseta P">
+    <!-- Configuração do Proprietário -->
+    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+      <h2 class="text-sm font-semibold text-slate-700 mb-3 flex items-center gap-2">
+        <i class="fa-solid fa-user-shield text-slate-500"></i> Configuração da Empresa / Dono
+      </h2>
+      <div class="flex gap-2">
+        <input type="text" id="whats-dono" placeholder="WhatsApp do Dono (com DDD ex: 5521999999999)" 
+               class="flex-1 bg-slate-50 border border-slate-300 text-sm rounded-lg p-2.5 outline-none focus:border-blue-500"
+               onchange="salvarWhatsDono()">
+        <button onclick="salvarWhatsDono()" class="bg-slate-800 text-white text-xs px-4 rounded-lg font-medium hover:bg-slate-700">Salvar</button>
       </div>
-      <div class="form-group">
-        <label for="foto">Foto do Produto (Galeria/Câmera):</label>
-        <input type="file" id="foto" accept="image/*">
-      </div>
-      <div class="form-group">
-        <label for="preco">Preço de Venda (R$):</label>
-        <input type="number" step="0.01" id="preco" required placeholder="29.90">
-      </div>
-      <div class="form-group">
-        <label for="qtd">Quantidade Inicial em Estoque:</label>
-        <input type="number" id="qtd" required placeholder="10">
-      </div>
-      <div class="form-group">
-        <label for="qtd_min">Estoque Mínimo (Alerta de Baixa):</label>
-        <input type="number" id="qtd_min" required placeholder="3">
-      </div>
-      <div class="form-group">
-        <label for="whats">WhatsApp do Fornecedor/Revendedor (com DDD):</label>
-        <input type="text" id="whats" placeholder="5521988888888">
-      </div>
-      <button type="submit" class="btn btn-primary">Salvar Produto</button>
-    </form>
-  </div>
+    </div>
 
-  <!-- Lista de Produtos -->
-  <h2 style="font-size: 1.1rem; margin-bottom: 10px;">Produtos no Estoque</h2>
-  <div class="grid-produtos" id="lista-produtos"></div>
+    <!-- Form de Cadastro -->
+    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+      <h2 class="text-sm font-semibold text-slate-700 mb-4 flex items-center gap-2">
+        <i class="fa-solid fa-plus-circle text-blue-600"></i> Cadastrar Novo Produto
+      </h2>
+      <form id="form-produto" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-xs font-medium text-slate-600 mb-1">Nome do Produto</label>
+          <input type="text" id="nome" required placeholder="Ex: Camiseta Oversized" class="w-full bg-slate-50 border border-slate-300 text-sm rounded-lg p-2.5 outline-none focus:border-blue-500">
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-600 mb-1">Foto do Produto</label>
+          <input type="file" id="foto" accept="image/*" class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer">
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-600 mb-1">Preço de Venda (R$)</label>
+          <input type="number" step="0.01" id="preco" required placeholder="49.90" class="w-full bg-slate-50 border border-slate-300 text-sm rounded-lg p-2.5 outline-none focus:border-blue-500">
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-600 mb-1">Quantidade Inicial</label>
+          <input type="number" id="qtd" required placeholder="15" class="w-full bg-slate-50 border border-slate-300 text-sm rounded-lg p-2.5 outline-none focus:border-blue-500">
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-600 mb-1">Estoque Mínimo (Alerta)</label>
+          <input type="number" id="qtd_min" required placeholder="5" class="w-full bg-slate-50 border border-slate-300 text-sm rounded-lg p-2.5 outline-none focus:border-blue-500">
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-600 mb-1">WhatsApp do Fornecedor</label>
+          <input type="text" id="whats" placeholder="5521988888888" class="w-full bg-slate-50 border border-slate-300 text-sm rounded-lg p-2.5 outline-none focus:border-blue-500">
+        </div>
+        <div class="md:col-span-2">
+          <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 rounded-lg text-sm transition">Salvar Produto no Estoque</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Busca e Lista de Produtos -->
+    <div class="space-y-4">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+        <h2 class="text-base font-bold text-slate-800">Catálogo de Produtos</h2>
+        <input type="text" id="busca" onkeyup="filtrarProdutos()" placeholder="🔍 Buscar produto pelo nome..." class="bg-white border border-slate-300 text-xs rounded-lg p-2.5 w-full md:w-64 outline-none focus:border-blue-500">
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4" id="lista-produtos"></div>
+    </div>
+
+  </main>
 
   <script>
     let produtos = JSON.parse(localStorage.getItem('produtos_estoque')) || [];
@@ -105,22 +123,20 @@
     function salvarWhatsDono() {
       whatsDono = inputWhatsDono.value.replace(/\D/g, '');
       localStorage.setItem('whats_dono', whatsDono);
+      alert("WhatsApp do proprietário salvo!");
     }
 
     form.addEventListener('submit', (e) => {
       e.preventDefault();
-      
       const fileInput = document.getElementById('foto');
       const file = fileInput.files[0];
 
       if (file) {
         const reader = new FileReader();
-        reader.onloadend = function() {
-          salvarProduto(reader.result);
-        };
+        reader.onloadend = () => salvarProduto(reader.result);
         reader.readAsDataURL(file);
       } else {
-        salvarProduto('https://via.placeholder.com/300x200?text=Sem+Foto');
+        salvarProduto('https://images.unsplash.com/photo-1586864387967-d02ef85d93e8?w=300&auto=format&fit=crop&q=60');
       }
     });
 
@@ -159,28 +175,22 @@
     }
 
     function removerProduto(id) {
-      if (confirm("Tem certeza que deseja excluir este produto do estoque?")) {
+      if (confirm("Remover este produto permanentemente?")) {
         produtos = produtos.filter(p => p.id !== id);
         salvarERenderizar();
       }
     }
 
     function notificarVendaDono(p) {
-      const msg = encodeURIComponent(`🚨 *VENDA REGISTRADA*\n\nProduto: ${p.nome}\nPreço: R$ ${p.preco.toFixed(2)}\nEstoque Restante: ${p.qtd} un.\nStatus: ${p.qtd <= p.qtd_min ? '⚠️ ESTOQUE BAIXO' : '✅ Ok'}`);
+      const msg = encodeURIComponent(`🚨 *NOVA VENDA REGISTRADA*\n\n📦 Produto: ${p.nome}\n💵 Valor: R$ ${p.preco.toFixed(2)}\n📉 Estoque Restante: ${p.qtd} un.\nStatus: ${p.qtd <= p.qtd_min ? '⚠️ ESTOQUE BAIXO' : '✅ Ok'}`);
       window.open(`https://wa.me/${whatsDono}?text=${msg}`, '_blank');
     }
 
     function enviarResumoDono() {
-      if (!whatsDono) {
-        alert('Informe o WhatsApp do dono primeiro.');
-        return;
-      }
-      if (produtos.length === 0) {
-        alert('Nenhum produto cadastrado.');
-        return;
-      }
+      if (!whatsDono) return alert('Cadastre o WhatsApp do dono primeiro.');
+      if (produtos.length === 0) return alert('Nenhum produto em estoque.');
 
-      let texto = `📊 *RELATÓRIO DE ESTOQUE*\n\n`;
+      let texto = `📊 *RELATÓRIO DE ESTOQUE COMPLETO*\n\n`;
       produtos.forEach(p => {
         const status = p.qtd <= 0 ? '❌ ESGOTADO' : (p.qtd <= p.qtd_min ? '⚠️ BAIXO' : '✅ OK');
         texto += `• *${p.nome}*: ${p.qtd} un. | R$ ${p.preco.toFixed(2)} [${status}]\n`;
@@ -189,42 +199,84 @@
       window.open(`https://wa.me/${whatsDono}?text=${encodeURIComponent(texto)}`, '_blank');
     }
 
+    function filtrarProdutos() {
+      const termo = document.getElementById('busca').value.toLowerCase();
+      const cards = container.getElementsByClassName('card-item');
+      Array.from(cards).forEach(card => {
+        const nome = card.getAttribute('data-nome').toLowerCase();
+        card.style.display = nome.includes(termo) ? 'flex' : 'none';
+      });
+    }
+
+    function atualizarKPIs() {
+      const totalItens = produtos.reduce((acc, p) => acc + p.qtd, 0);
+      const valorTotal = produtos.reduce((acc, p) => acc + (p.qtd * p.preco), 0);
+      const alertas = produtos.filter(p => p.qtd <= p.qtd_min).length;
+
+      document.getElementById('kpi-total-itens').innerText = totalItens;
+      document.getElementById('kpi-valor-total').innerText = `R$ ${valorTotal.toFixed(2)}`;
+      document.getElementById('kpi-alertas').innerText = alertas;
+    }
+
     function salvarERenderizar() {
       localStorage.setItem('produtos_estoque', JSON.stringify(produtos));
       container.innerHTML = '';
+      atualizarKPIs();
 
       produtos.forEach(p => {
-        let badgeClass = 'badge-ok';
-        let badgeTexto = 'Estoque OK';
+        let badgeBg = 'bg-emerald-500';
+        let badgeTxt = 'Estoque OK';
 
         if (p.qtd <= 0) {
-          badgeClass = 'badge-critico';
-          badgeTexto = 'Esgotado';
+          badgeBg = 'bg-red-500';
+          badgeTxt = 'Esgotado';
         } else if (p.qtd <= p.qtd_min) {
-          badgeClass = 'badge-alerta';
-          badgeTexto = 'Estoque Baixo';
+          badgeBg = 'bg-amber-500';
+          badgeTxt = 'Estoque Baixo';
         }
 
         const msgWhatsFornecedor = encodeURIComponent(`Olá! Preciso reabastecer o produto: ${p.nome}. Estoque atual: ${p.qtd} unidade(s).`);
         const linkWhatsFornecedor = `https://wa.me/${p.whats}?text=${msgWhatsFornecedor}`;
 
         const card = document.createElement('div');
-        card.className = 'produto-card';
+        card.className = 'card-item bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm flex flex-col justify-between relative';
+        card.setAttribute('data-nome', p.nome);
+
         card.innerHTML = `
-          <span class="badge ${badgeClass}">${badgeTexto}</span>
-          <img src="${p.foto}" class="img-produto" alt="${p.nome}">
-          <h3>${p.nome}</h3>
-          <p style="font-size: 0.9rem; color: #64748b;">Preço: R$ ${p.preco.toFixed(2)}</p>
-          <div class="qtd-box">Estoque: ${p.qtd} un. <span style="font-size: 0.8rem; font-weight: normal; color: #64748b;">(Mín: ${p.qtd_min})</span></div>
-          
-          <div class="acoes">
-            <button class="btn-acao btn-venda" onclick="alterarQtd(${p.id}, -1)">-1 Venda</button>
-            <button class="btn-acao btn-entrada" onclick="alterarQtd(${p.id}, 1)">+1 Entrada</button>
+          <div>
+            <span class="absolute top-3 right-3 text-[10px] uppercase font-bold text-white px-2 py-1 rounded-full ${badgeBg} z-10 shadow-sm">${badgeTxt}</span>
+            <div class="h-40 w-full overflow-hidden bg-slate-100">
+              <img src="${p.foto}" class="w-full h-full object-cover" alt="${p.nome}">
+            </div>
+            <div class="p-4">
+              <h3 class="font-bold text-slate-800 text-sm line-clamp-1">${p.nome}</h3>
+              <p class="text-xs font-semibold text-blue-600 mt-1">R$ ${p.preco.toFixed(2)}</p>
+              <div class="mt-3 flex items-center justify-between text-xs text-slate-500 border-t border-slate-100 pt-2">
+                <span>Estoque Atual:</span>
+                <span class="font-bold text-sm text-slate-800">${p.qtd} <span class="text-[10px] text-slate-400 font-normal">(Mín: ${p.qtd_min})</span></span>
+              </div>
+            </div>
           </div>
 
-          ${p.qtd <= p.qtd_min && p.whats ? `<a href="${linkWhatsFornecedor}" target="_blank" class="btn-whats">🚚 Pedir Reposição (Fornecedor)</a>` : ''}
-          
-          <button class="btn btn-remover" onclick="removerProduto(${p.id})">🗑️ Remover Produto</button>
+          <div class="p-4 pt-0 space-y-2">
+            <div class="grid grid-cols-2 gap-2">
+              <button onclick="alterarQtd(${p.id}, -1)" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold py-2 rounded-lg text-xs transition flex items-center justify-center gap-1">
+                <i class="fa-solid fa-minus"></i> Venda
+              </button>
+              <button onclick="alterarQtd(${p.id}, 1)" class="bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold py-2 rounded-lg text-xs transition flex items-center justify-center gap-1">
+                <i class="fa-solid fa-plus"></i> Entrada
+              </button>
+            </div>
+
+            ${p.qtd <= p.qtd_min && p.whats ? `
+              <a href="${linkWhatsFornecedor}" target="_blank" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 rounded-lg text-xs transition text-center flex items-center justify-center gap-2">
+                <i class="fa-brands fa-whatsapp"></i> Reposição
+              </a>` : ''}
+
+            <button onclick="removerProduto(${p.id})" class="w-full text-slate-400 hover:text-red-600 text-xs py-1 transition flex items-center justify-center gap-1">
+              <i class="fa-solid fa-trash-can"></i> Excluir
+            </button>
+          </div>
         `;
         container.appendChild(card);
       });
